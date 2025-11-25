@@ -62,14 +62,19 @@ function renderTripHeader(trip) {
 
 async function loadDestinations() {
     try {
+        console.log('📍 載入景點列表...');
         const response = await fetch(`/api/trips/${currentTripId}/destinations`, {
             credentials: 'same-origin'
         });
+
+        console.log('景點載入回應狀態:', response.status);
+
         if (!response.ok) {
             throw new Error('載入景點失敗');
         }
 
         const destinations = await response.json();
+        console.log('載入景點資料:', destinations);
         renderDestinations(destinations);
     } catch (error) {
         console.error('載入景點錯誤:', error);
@@ -106,14 +111,19 @@ function renderDestinations(destinations) {
 
 async function loadExpenses() {
     try {
+        console.log('💰 載入費用列表...');
         const response = await fetch(`/api/trips/${currentTripId}/expenses`, {
             credentials: 'same-origin'
         });
+
+        console.log('費用載入回應狀態:', response.status);
+
         if (!response.ok) {
             throw new Error('載入費用失敗');
         }
 
         const expenses = await response.json();
+        console.log('載入費用資料:', expenses);
         renderExpenses(expenses);
         loadSettlement();
     } catch (error) {
@@ -217,6 +227,8 @@ async function handleDestinationSubmit(event) {
         notes: document.getElementById('destination-notes').value
     };
 
+    console.log('📍 新增景點:', data);
+
     try {
         const response = await fetch(`/api/trips/${currentTripId}/destinations`, {
             method: 'POST',
@@ -227,16 +239,22 @@ async function handleDestinationSubmit(event) {
             body: JSON.stringify(data)
         });
 
+        console.log('景點 API 回應狀態:', response.status);
+
         if (response.ok) {
+            const result = await response.json();
+            console.log('景點新增成功:', result);
             closeDestinationModal();
             loadDestinations();
             alert('景點新增成功！');
         } else {
-            alert('新增景點失敗，請再試一次');
+            const error = await response.json();
+            console.error('景點新增失敗:', error);
+            alert('新增景點失敗: ' + (error.error || '請再試一次'));
         }
     } catch (error) {
         console.error('新增景點錯誤:', error);
-        alert('新增景點失敗，請再試一次');
+        alert('新增景點失敗，請檢查網路連線後再試一次');
     }
 }
 
@@ -289,6 +307,8 @@ async function handleExpenseSubmit(event) {
         split_with: splitWith
     };
 
+    console.log('💰 新增費用:', data);
+
     try {
         const response = await fetch('/api/expenses', {
             method: 'POST',
@@ -299,16 +319,22 @@ async function handleExpenseSubmit(event) {
             body: JSON.stringify(data)
         });
 
+        console.log('費用 API 回應狀態:', response.status);
+
         if (response.ok) {
+            const result = await response.json();
+            console.log('費用新增成功:', result);
             closeExpenseModal();
             loadExpenses();
             alert('費用記錄成功！');
         } else {
-            alert('記錄費用失敗，請再試一次');
+            const error = await response.json();
+            console.error('費用新增失敗:', error);
+            alert('記錄費用失敗: ' + (error.error || '請再試一次'));
         }
     } catch (error) {
         console.error('記錄費用錯誤:', error);
-        alert('記錄費用失敗，請再試一次');
+        alert('記錄費用失敗，請檢查網路連線後再試一次');
     }
 }
 

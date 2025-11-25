@@ -390,33 +390,33 @@
         </div>
     </div>
 
-    <!-- 新增景點 Modal -->
-    <div id="destination-modal" class="modal">
+    <!-- 新增費用 Modal -->
+    <div id="expense-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">新增景點</h3>
-                <button class="close-btn" onclick="closeDestinationModal()">&times;</button>
+                <h3 class="modal-title">新增費用</h3>
+                <button class="close-btn" onclick="closeExpenseModal()">&times;</button>
             </div>
-            <form id="destination-form">
+            <form id="expense-form">
                 <div class="form-group">
-                    <label for="destination-name">景點名稱 *</label>
-                    <input type="text" id="destination-name" required placeholder="例如：清水寺">
+                    <label for="expense-description">費用描述 *</label>
+                    <input type="text" id="expense-description" required placeholder="例如：午餐">
                 </div>
                 <div class="form-group">
-                    <label for="destination-location">位置</label>
-                    <input type="text" id="destination-location" placeholder="例如：京都東山區">
+                    <label for="expense-amount">金額 *</label>
+                    <input type="number" id="expense-amount" step="0.01" required placeholder="0.00">
                 </div>
                 <div class="form-group">
-                    <label for="destination-date">造訪日期</label>
-                    <input type="date" id="destination-date">
+                    <label for="expense-payer">付款人 *</label>
+                    <input type="text" id="expense-payer" required placeholder="誰付的錢">
                 </div>
                 <div class="form-group">
-                    <label for="destination-notes">備註</label>
-                    <textarea id="destination-notes" placeholder="景點相關的建議或筆記"></textarea>
+                    <label for="expense-split">分帳對象（用逗號分隔）</label>
+                    <input type="text" id="expense-split" placeholder="例如：Alice,Bob,Charlie">
                 </div>
                 <div class="modal-actions">
-                    <button type="button" class="btn-secondary" onclick="closeDestinationModal()">取消</button>
-                    <button type="submit" class="btn-primary">新增景點</button>
+                    <button type="button" class="btn-secondary" onclick="closeExpenseModal()">取消</button>
+                    <button type="submit" class="btn-primary">記錄費用</button>
                 </div>
             </form>
         </div>
