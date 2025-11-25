@@ -34,7 +34,9 @@ function setupFormListeners() {
 
 async function loadTripDetails() {
     try {
-        const response = await fetch(`/api/trips/${currentTripId}`);
+        const response = await fetch(`/api/trips/${currentTripId}`, {
+            credentials: 'same-origin'
+        });
         if (!response.ok) {
             if (response.status === 404) {
                 alert('找不到該旅遊');
@@ -60,7 +62,9 @@ function renderTripHeader(trip) {
 
 async function loadDestinations() {
     try {
-        const response = await fetch(`/api/trips/${currentTripId}/destinations`);
+        const response = await fetch(`/api/trips/${currentTripId}/destinations`, {
+            credentials: 'same-origin'
+        });
         if (!response.ok) {
             throw new Error('載入景點失敗');
         }
@@ -102,7 +106,9 @@ function renderDestinations(destinations) {
 
 async function loadExpenses() {
     try {
-        const response = await fetch(`/api/trips/${currentTripId}/expenses`);
+        const response = await fetch(`/api/trips/${currentTripId}/expenses`, {
+            credentials: 'same-origin'
+        });
         if (!response.ok) {
             throw new Error('載入費用失敗');
         }
@@ -146,7 +152,9 @@ function renderExpenses(expenses) {
 
 async function loadSettlement() {
     try {
-        const response = await fetch(`/api/trips/${currentTripId}/settlement`);
+        const response = await fetch(`/api/trips/${currentTripId}/settlement`, {
+            credentials: 'same-origin'
+        });
         if (!response.ok) {
             throw new Error('載入結帳資訊失敗');
         }
@@ -215,6 +223,7 @@ async function handleDestinationSubmit(event) {
             headers: {
                 'Content-Type': 'application/json'
             },
+            credentials: 'same-origin',
             body: JSON.stringify(data)
         });
 
@@ -238,7 +247,8 @@ async function deleteDestination(destinationId) {
 
     try {
         const response = await fetch(`/api/trips/${currentTripId}/destinations/${destinationId}`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            credentials: 'same-origin'
         });
 
         if (response.ok) {
@@ -285,6 +295,7 @@ async function handleExpenseSubmit(event) {
             headers: {
                 'Content-Type': 'application/json'
             },
+            credentials: 'same-origin',
             body: JSON.stringify(data)
         });
 
@@ -308,7 +319,8 @@ async function deleteExpense(expenseId) {
 
     try {
         const response = await fetch(`/api/expenses/${expenseId}`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            credentials: 'same-origin'
         });
 
         if (response.ok) {
@@ -350,6 +362,7 @@ async function handleShareSubmit(event) {
             headers: {
                 'Content-Type': 'application/json'
             },
+            credentials: 'same-origin',
             body: JSON.stringify({
                 target_username: username,
                 message: message
