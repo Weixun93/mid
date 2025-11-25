@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登入 - 旅遊分帳小幫手</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            background: var(--bg-light);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-header h1 {
+            color: var(--primary-dark);
+            margin-bottom: 8px;
+        }
+
+        .login-header p {
+            color: var(--text-light);
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .login-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .login-btn:disabled {
+            background: var(--text-light);
+            cursor: not-allowed;
+        }
+
+        .divider {
+            text-align: center;
+            margin: 20px 0;
+            position: relative;
+            color: var(--text-light);
+            font-size: 14px;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--border-color);
+        }
+
+        .divider span {
+            background: var(--bg-light);
+            padding: 0 15px;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .register-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .register-link a:hover {
+            color: var(--primary-dark);
+        }
+
+        .error-message {
+            background: var(--danger-color);
+            color: #721c24;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .success-message {
+            background: var(--success-color);
+            color: #155724;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <h1>✈️ 旅遊分帳</h1>
+            <p>登入你的帳戶</p>
+        </div>
+
+        <div id="error-message" class="error-message"></div>
+        <div id="success-message" class="success-message"></div>
+
+        <!-- 登入表單 -->
+        <form id="login-form">
+            <div class="form-group">
+                <label for="username">用戶名</label>
+                <input type="text" id="username" required placeholder="輸入你的用戶名">
+            </div>
+
+            <div class="form-group">
+                <label for="password">密碼</label>
+                <input type="password" id="password" required placeholder="輸入你的密碼">
+            </div>
+
+            <button type="submit" class="login-btn" id="login-btn">登入</button>
+        </form>
+
+        <div class="divider">
+            <span>或</span>
+        </div>
+
+        <!-- 註冊表單 -->
+        <form id="register-form" style="display: none;">
+            <div class="form-group">
+                <label for="reg-username">用戶名</label>
+                <input type="text" id="reg-username" required placeholder="選擇一個用戶名">
+            </div>
+
+            <div class="form-group">
+                <label for="reg-password">密碼</label>
+                <input type="password" id="reg-password" required placeholder="設定密碼">
+            </div>
+
+            <button type="submit" class="login-btn" id="register-btn">註冊</button>
+        </form>
+
+        <div class="register-link">
+            <a onclick="toggleForm()">還沒有帳戶？點擊註冊</a>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+</body>
+</html>

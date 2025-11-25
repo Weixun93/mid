@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>旅遊分帳小幫手</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 導航 -->
+        <nav class="navbar">
+            <div class="nav-content">
+                <h1 class="logo">✈️ 旅遊分帳</h1>
+                <div class="nav-actions">
+                    <span class="user-info" id="user-info"></span>
+                    <button class="btn btn-secondary btn-sm" onclick="logout()" id="logout-btn" style="display:none;">登出</button>
+                    <a href="/login" class="btn btn-primary btn-sm" id="login-link">登入</a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- 主要內容 -->
+        <main class="main-content" id="main-content" style="display:none;">
+            <!-- 新增旅遊按鈕 -->
+            <div class="header-section">
+                <h2>我的旅遊</h2>
+                <button class="btn btn-primary" onclick="openNewTripModal()">+ 計畫新旅遊</button>
+            </div>
+
+            <!-- 分享給我的分帳 -->
+            <div class="shared-settlements-section">
+                <h3>📨 分享給我的分帳</h3>
+                <div id="shared-settlements-container" class="shared-settlements-list">
+                    <!-- 動態載入 -->
+                </div>
+            </div>
+
+            <!-- 旅遊列表 -->
+            <div id="trips-container" class="trips-grid">
+                <!-- 動態載入 -->
+            </div>
+
+            <!-- 空狀態 -->
+            <div id="empty-state" class="empty-state">
+                <p>還沒有計畫任何旅遊呢</p>
+                <p class="empty-hint">點擊「計畫新旅遊」開始記錄你的旅程吧！</p>
+            </div>
+        </main>
+    </div>
+
+    <!-- 新增旅遊 Modal -->
+    <div id="new-trip-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeNewTripModal()">&times;</span>
+            <h2>計畫新旅遊</h2>
+            
+            <form id="new-trip-form" onsubmit="createTrip(event)">
+                <div class="form-group">
+                    <label for="trip-name">旅遊名稱</label>
+                    <input type="text" id="trip-name" required placeholder="例：日本京都之旅">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="trip-start">開始日期</label>
+                        <input type="date" id="trip-start" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="trip-end">結束日期</label>
+                        <input type="date" id="trip-end" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="trip-desc">旅遊描述</label>
+                    <textarea id="trip-desc" placeholder="描述你的旅遊計畫..." rows="3"></textarea>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeNewTripModal()">取消</button>
+                    <button type="submit" class="btn btn-primary">建立旅遊</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
