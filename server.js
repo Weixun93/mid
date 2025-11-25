@@ -521,15 +521,14 @@ app.get('/api/trips/:trip_id/settlement', requireAuth, async (req, res) => {
       const payer = expense.payer;
       const amount = expense.amount;
       const splitWith = expense.split_with || [];
+      const totalPeople = splitWith.length + 1; // 包括付款人
 
       if (!balances[payer]) balances[payer] = 0;
-      balances[payer] += amount - (amount / splitWith.length);
+      balances[payer] += amount - (amount / totalPeople);
 
       splitWith.forEach(person => {
-        if (person !== payer) {
-          if (!balances[person]) balances[person] = 0;
-          balances[person] -= amount / splitWith.length;
-        }
+        if (!balances[person]) balances[person] = 0;
+        balances[person] -= amount / totalPeople;
       });
     });
 
@@ -586,15 +585,14 @@ app.post('/api/trips/:trip_id/share', requireAuth, async (req, res) => {
       const payer = expense.payer;
       const amount = expense.amount;
       const splitWith = expense.split_with || [];
+      const totalPeople = splitWith.length + 1; // 包括付款人
 
       if (!balances[payer]) balances[payer] = 0;
-      balances[payer] += amount - (amount / splitWith.length);
+      balances[payer] += amount - (amount / totalPeople);
 
       splitWith.forEach(person => {
-        if (person !== payer) {
-          if (!balances[person]) balances[person] = 0;
-          balances[person] -= amount / splitWith.length;
-        }
+        if (!balances[person]) balances[person] = 0;
+        balances[person] -= amount / totalPeople;
       });
     });
 

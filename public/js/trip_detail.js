@@ -162,14 +162,18 @@ function renderExpenses(expenses) {
 
 async function loadSettlement() {
     try {
+        console.log('📊 載入結帳資訊...');
         const response = await fetch(`/api/trips/${currentTripId}/settlement`, {
             credentials: 'same-origin'
         });
+        console.log('結帳載入回應狀態:', response.status);
+
         if (!response.ok) {
             throw new Error('載入結帳資訊失敗');
         }
 
         const balances = await response.json();
+        console.log('載入結帳資料:', balances);
         renderSettlement(balances);
     } catch (error) {
         console.error('載入結帳錯誤:', error);
@@ -177,14 +181,17 @@ async function loadSettlement() {
 }
 
 function renderSettlement(balances) {
+    console.log('📊 渲染結帳資料:', balances);
     const section = document.getElementById('settlement-section');
     const list = document.getElementById('settlement-list');
 
     if (!balances || Object.keys(balances).length === 0) {
+        console.log('📊 沒有結帳資料，隱藏結帳區塊');
         section.style.display = 'none';
         return;
     }
 
+    console.log('📊 顯示結帳區塊');
     section.style.display = 'block';
 
     const balanceItems = Object.entries(balances).map(([person, amount]) => {
