@@ -424,3 +424,8 @@ window.onclick = function(event) {
         closeShareModal();
     }
 }
+
+// 返回首頁函數
+function goBack() {
+    window.location.href = '/';
+}
