@@ -8,7 +8,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function checkAuth() {
     try {
-        const response = await fetch('/auth/user');
+        const response = await fetch('/auth/user', {
+            credentials: 'same-origin' // 確保發送 cookies
+        });
         if (response.ok) {
             const data = await response.json();
             const mainContent = document.getElementById('main-content');
@@ -29,9 +31,30 @@ async function checkAuth() {
     }
 }
 
+async function loadTrips() {
+    try {
+        console.log('📋 載入旅遊列表...');
+        const response = await fetch('/api/trips', {
+            credentials: 'same-origin' // 確保發送 cookies
+        });
+
+        if (response.ok) {
+            const trips = await response.json();
+            console.log('載入旅遊:', trips);
+            renderTrips(trips);
+        } else {
+            console.error('載入旅遊失敗:', response.status);
+        }
+    } catch (error) {
+        console.error('載入旅遊錯誤:', error);
+    }
+}
+
 async function loadSharedSettlements() {
     try {
-        const response = await fetch('/api/shared-settlements');
+        const response = await fetch('/api/shared-settlements', {
+            credentials: 'same-origin' // 確保發送 cookies
+        });
         if (response.ok) {
             const sharedSettlements = await response.json();
             renderSharedSettlements(sharedSettlements);
@@ -116,25 +139,34 @@ async function createTrip(event) {
         description: document.getElementById('trip-desc').value
     };
 
+    console.log('📝 建立旅遊:', data);
+
     try {
         const response = await fetch('/api/trips', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
+            credentials: 'same-origin', // 確保發送 cookies
             body: JSON.stringify(data)
         });
 
+        console.log('API 回應狀態:', response.status);
+
         if (response.ok) {
+            const result = await response.json();
+            console.log('建立成功:', result);
             closeNewTripModal();
             loadTrips();
             alert('旅遊建立成功！');
         } else {
-            alert('建立失敗，請再試一次');
+            const error = await response.json();
+            console.error('建立失敗:', error);
+            alert('建立失敗: ' + (error.error || '請再試一次'));
         }
     } catch (error) {
-        console.error('錯誤:', error);
-        alert('建立失敗，請再試一次');
+        console.error('網路錯誤:', error);
+        alert('網路錯誤，請檢查網路連線後再試一次');
     }
 }
 
@@ -145,7 +177,8 @@ async function logout() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
-                }
+                },
+                credentials: 'same-origin' // 確保發送 cookies
             });
 
             if (response.ok) {
