@@ -422,6 +422,38 @@
         </div>
     </div>
 
+    <!-- 新增景點 Modal -->
+    <div id="destination-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">新增景點</h3>
+                <button class="close-btn" onclick="closeDestinationModal()">&times;</button>
+            </div>
+            <form id="destination-form">
+                <div class="form-group">
+                    <label for="destination-name">景點名稱 *</label>
+                    <input type="text" id="destination-name" required placeholder="景點名稱">
+                </div>
+                <div class="form-group">
+                    <label for="destination-location">地點</label>
+                    <input type="text" id="destination-location" placeholder="景點位置">
+                </div>
+                <div class="form-group">
+                    <label for="destination-date">參觀日期</label>
+                    <input type="date" id="destination-date">
+                </div>
+                <div class="form-group">
+                    <label for="destination-notes">備註</label>
+                    <textarea id="destination-notes" placeholder="景點相關備註..."></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" onclick="closeDestinationModal()">取消</button>
+                    <button type="submit" class="btn-primary">新增景點</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- 分享分帳 Modal -->
     <div id="share-modal" class="modal">
         <div class="modal-content">
