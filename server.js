@@ -123,6 +123,8 @@ const requireAuth = (req, res, next) => {
 // ==================== 初始化預設用戶 ====================
 async function initializeDefaultUsers() {
   try {
+    console.log('🔄 開始初始化預設用戶...');
+
     const defaultUsers = [
       { username: 'alice', password: 'alice123' },
       { username: 'bob', password: 'bob123' },
@@ -140,18 +142,48 @@ async function initializeDefaultUsers() {
 
       if (!existing) {
         const hashedPassword = await bcrypt.hash(user.password, 10);
-        await supabase.from('users').insert({
+        const { error: insertError } = await supabase.from('users').insert({
           username: user.username,
           password_hash: hashedPassword,
           created_at: new Date().toISOString()
         });
-        console.log(`✓ 建立預設用戶: ${user.username}`);
+
+        if (insertError) {
+          console.error(`❌ 建立用戶 ${user.username} 失敗:`, insertError.message);
+        } else {
+          console.log(`✓ 建立預設用戶: ${user.username}`);
+        }
+      } else {
+        console.log(`✓ 用戶 ${user.username} 已存在`);
       }
     }
 
     console.log('✓ 預設用戶初始化完成');
   } catch (err) {
-    console.error('初始化預設用戶失敗:', err.message);
+    console.error('❌ 初始化預設用戶失敗:', err.message);
+  }
+}
+
+// ==================== 檢查資料庫連接 ====================
+async function checkDatabaseConnection() {
+  try {
+    console.log('🔍 檢查資料庫連接...');
+
+    // 測試基本查詢
+    const { data, error } = await supabase
+      .from('users')
+      .select('count', { count: 'exact', head: true });
+
+    if (error) {
+      console.error('❌ 資料庫連接失敗:', error.message);
+      return false;
+    }
+
+    console.log('✅ 資料庫連接正常');
+    return true;
+  } catch (err) {
+    console.error('❌ 資料庫連接檢查失敗:', err.message);
+    return false;
   }
 }
 
@@ -608,9 +640,28 @@ app.get('/api/shared-settlements', requireAuth, async (req, res) => {
   }
 });
 
-// ==================== 前端路由 ====================
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+// ==================== 資料庫初始化路由 ====================
+app.post('/api/init-database', async (req, res) => {
+  try {
+    console.log('🔧 開始初始化資料庫...');
+
+    // 檢查資料庫連接
+    const dbConnected = await checkDatabaseConnection();
+    if (!dbConnected) {
+      return res.status(500).json({ error: '無法連接到資料庫' });
+    }
+
+    // 初始化預設用戶
+    await initializeDefaultUsers();
+
+    res.json({
+      message: '資料庫初始化完成',
+      users: ['alice', 'bob', 'charlie', 'diana']
+    });
+  } catch (err) {
+    console.error('資料庫初始化失敗:', err);
+    res.status(500).json({ error: '資料庫初始化失敗: ' + err.message });
+  }
 });
 
 app.get('/trip', requireAuth, (req, res) => {
@@ -624,13 +675,24 @@ app.get('/login', (req, res) => {
 // ==================== 啟動服務器 ====================
 async function startServer() {
   try {
+    console.log('🚀 啟動旅遊分帳應用程式...');
+
+    // 檢查資料庫連接
+    const dbConnected = await checkDatabaseConnection();
+    if (!dbConnected) {
+      console.error('❌ 無法連接到資料庫，應用程式無法啟動');
+      process.exit(1);
+    }
+
+    // 初始化預設用戶
     await initializeDefaultUsers();
-    
+
     app.listen(PORT, () => {
       console.log(`\n✨ 旅遊分帳應用運行在 http://localhost:${PORT}\n`);
+      console.log('📋 預設用戶: alice/alice123, bob/bob123, charlie/charlie123, diana/diana123');
     });
   } catch (err) {
-    console.error('啟動服務器失敗:', err);
+    console.error('❌ 啟動服務器失敗:', err);
     process.exit(1);
   }
 }
