@@ -382,15 +382,23 @@ app.delete('/api/trips/:trip_id', requireAuth, async (req, res) => {
 // ==================== 景點路由 ====================
 app.get('/api/trips/:trip_id/destinations', requireAuth, async (req, res) => {
   try {
+    console.log('📍 獲取景點請求:', {
+      trip_id: req.params.trip_id,
+      user: req.user.id
+    });
+
     const { data, error } = await supabase
       .from('destinations')
       .select('*')
       .eq('trip_id', req.params.trip_id)
       .order('visit_date', { ascending: true });
 
+    console.log('📍 景點查詢結果:', { data: data?.length || 0, error });
+
     if (error) throw error;
     res.json(data || []);
   } catch (err) {
+    console.error('獲取景點錯誤:', err);
     res.status(500).json({ error: err.message });
   }
 });
@@ -478,15 +486,23 @@ app.post('/api/expenses', requireAuth, async (req, res) => {
 
 app.get('/api/trips/:trip_id/expenses', requireAuth, async (req, res) => {
   try {
+    console.log('💰 獲取費用請求:', {
+      trip_id: req.params.trip_id,
+      user: req.user.id
+    });
+
     const { data, error } = await supabase
       .from('expenses')
       .select('*')
       .eq('trip_id', req.params.trip_id)
       .eq('user_id', req.user.id);
 
+    console.log('💰 費用查詢結果:', { data: data?.length || 0, error });
+
     if (error) throw error;
     res.json(data || []);
   } catch (err) {
+    console.error('獲取費用錯誤:', err);
     res.status(500).json({ error: err.message });
   }
 });
